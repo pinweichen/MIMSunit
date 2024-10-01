@@ -341,7 +341,7 @@ custom_mims_unit <-
 
     # check timestamp duplication after the timestamp column is sorted
     if (use_snapshot_to_check) {
-      ts_has_duplication = any(diff(df[1:pmax(100,round(nrow(df[,1])*0.1)),1]) == 0)
+      ts_has_duplication = any(diff(df[1:pmax(100,round(length(df[,1])*0.1)),1]) == 0)
     } else {
       ts_has_duplication = any(diff(df[,1]) == 0)
     }

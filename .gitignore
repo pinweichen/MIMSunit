@@ -9,3 +9,9 @@ data-raw-archive
 revdep
 docs
 inst/app/rsconnect*
+/data-raw
+/.github
+/man
+/inst
+/.github
+/man
