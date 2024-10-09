@@ -30,13 +30,24 @@ if(!require(MIMSunit)){
 
 rm(list=ls()) 
 options(digits.secs = 3)
+# year_range <- "2011-2012"
+year_range <- "2013-2014"
 
-general <- "/mnt/isilon//chps_digital_health_core_general/Benny_Actigraphy/NHANES/NHANES_2011-2012/"
+if (year_range %in% "2013-2014"){
+  symbol_nm <- "H"
+} else if(years_range %in% "2011-2012"){
+  symbol_nm <- "G"
+} else {
+  print("Incorrect year range")
+}
+
+
+general <- paste0("/mnt/isilon//chps_digital_health_core_general/Benny_Actigraphy/NHANES/NHANES_",year_range,"/")
 #general <- "/Volumes/chps_digital_health_core_general/Benny_Actigraphy/NHANES/NHANES_2011-2012/"
 raw_data_extract <- paste0(general, "MAP_test_extracted/")
 # 
-# demo<-haven::read_xpt(paste0(general,"DEMO_G.XPT")) 
-paymin<-haven::read_xpt(paste0(general,"PAXMIN_G.XPT")) 
+# demo<-haven::read_xpt(paste0(general,"DEMO_",symbol_nm,".XPT")) 
+paymin<-haven::read_xpt(paste0(general,"PAXMIN_",symbol_nm,".XPT")) 
 setDT(paymin)
 dynamic_range = c(-8, 8)
 epoch_length = '60 sec'
@@ -72,6 +83,11 @@ for (file_n in 1:length(ls_file_folders)){
 error_csv_all <- rbindlist(ls_error_csv)
 csv_stat_all <- rbindlist(ls_csv_stat)
 
+
+error_report_path <- paste0(general,"/error_report/")
+dir.create(error_report_path,recursive = T)
+fwrite(error_csv_all, paste0(error_report_path,"error_list.csv"))
+fwrite(csv_stat_all, paste0(error_report_path,"all_data_stat.csv"))
 
 library(ggplot2)
 ggplot()+ 
