@@ -89,6 +89,46 @@ dir.create(error_report_path,recursive = T)
 fwrite(error_csv_all, paste0(error_report_path,"error_list.csv"))
 fwrite(csv_stat_all, paste0(error_report_path,"all_data_stat.csv"))
 
+# Restart from here ===========================================
+if(!require(tidyverse)){
+  install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+  library(tidyverse)
+} else {
+  library(tidyverse)
+}
+
+if(!require(devtools)){
+  install.packages("devtools", repos = "http://cran.us.r-project.org")
+  library(devtools)
+} else {
+  library(devtools)
+}
+
+if(!require(data.table)){
+  install.packages("data.table", repos = "http://cran.us.r-project.org")
+  library(data.table)
+} else {
+  library(data.table)
+}
+if(!require(MIMSunit)){
+  install.packages("/mnt/isilon//chps_digital_health_core_general/Benny_Actigraphy/NHANES/srcs/packages/MIMSunit/", repos = NULL, type="source")
+  
+  library(MIMSunit)
+} else {
+  library(MIMSunit)
+}
+
+rm(list=ls()) 
+year_range <- "2013-2014"
+general <- paste0("/mnt/isilon//chps_digital_health_core_general/Benny_Actigraphy/NHANES/NHANES_",year_range,"/")
+#general <- "/Volumes/chps_digital_health_core_general/Benny_Actigraphy/NHANES/NHANES_2011-2012/"
+raw_data_extract <- paste0(general, "MAP_test_extracted/")
+error_report_path <- paste0(general,"/error_report/")
+
+
+csv_stat_all <- fread(paste0(error_report_path,"all_data_stat.csv"))
+error_csv_all <- fread(paste0(error_report_path,"error_list.csv"))
+
 library(ggplot2)
 ggplot()+ 
   geom_histogram(data = csv_stat_all, aes(x = count_zero))
@@ -96,5 +136,6 @@ ggplot()+
 ggplot() +
   geom_boxplot(data = csv_stat_all, aes(x = average_diff))
 
-
+ggplot()+ 
+  geom_histogram(data = error_csv_all, aes(x = diff_mims)) 
 
